@@ -1,0 +1,18 @@
+Leetcode Medium
+Pandas
+Department Highest Salary
+
+import pandas as pd
+
+def department_highest_salary(employee: pd.DataFrame, department: pd.DataFrame) -> pd.DataFrame:
+    department = department.rename(columns = {"id" : "departmentId", "name" : "Department"})
+    employee = employee.rename(columns = {"name": "Employee", "salary": "Salary"})
+    df = pd.merge(employee, department, on=['departmentId'])
+    df['Rank'] = df.groupby('Department')['Salary'].rank(method='dense', ascending=False).astype(int)
+    df = df.sort_values(['Salary', 'Employee'], ascending = False)
+    #df = df.sort_values(['Salary', 'Department'], inplace = True)
+    df = df[df['Rank'] == 1]
+    df = df[["Department", "Employee", "Salary"]]
+    
+
+    return df
